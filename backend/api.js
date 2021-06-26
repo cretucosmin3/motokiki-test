@@ -1,19 +1,11 @@
 "use strict";
 
 const Hapi = require("@hapi/hapi");
-const HapiCookie = require("@hapi/cookie");
 
 class WebApi {
   static #started = false;
   static #server;
   static #routes = [];
-  static #users = [
-    {
-      id: 2,
-      name: "admin",
-      password: "admin",
-    },
-  ];
 
   // Register a get route
   static setGet = (path, method) => {
@@ -45,24 +37,21 @@ class WebApi {
       method: route.type,
       path: route.path,
       options: {
-        auth: {
-          mode: "try",
-        },
-        handler: (request, h) => {
+        handler: async (request, h) => {
           try {
-            if (!request.auth.isAuthenticated) {
-              throw "Not authenticated!";
-            }
-
-            //if (!route.path.startsWith(this.#authPath))
-            //  this.#checkAuth(request.state.data);
+            let receivedData = route.type == "GET" ? request.query : request.payload;
+            let returnedData = await route.method(receivedData);
 
             return {
               error: false,
-              data: route.method(request, h),
+              data: returnedData,
             };
           } catch (error) {
-            return { error: true, message: error };
+            console.log(error);
+            return {
+              error: true,
+              message: error
+            };
           }
         },
       },

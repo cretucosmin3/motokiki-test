@@ -1,0 +1,86 @@
+.app {
+  background-color: #dadada;
+  text-align: center;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  color: black;
+}
+
+.modal {
+  display:flex;
+  flex-wrap:wrap;
+  flex-direction:column;
+  flex:0.8;
+  width: 60vw;
+  border-radius: 0.2em;
+  background-color: rgb(255, 255, 255);
+  box-shadow: rgb(201, 201, 201) 1px 4px 20px;
+  
+}
+
+.modalHeader {
+  display:flex;
+  flex: 0 35px 35px;
+  border-color: black;
+  border-width: 1px;
+  padding: 5px;
+  padding-inline: 15px;
+  align-items: center;
+  justify-items: flex-end;
+}
+
+.modalBody {
+  flex:1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background-color: green;
+}
+
+.modalFooter {
+  flex:content;
+  background-color: purple;
+}
+
+.autoContainer {
+  display: grid;
+  grid-gap: 0.5em;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+
+.btn {
+  display: grid;
+  flex: content;
+  align-self: flex-end;
+  padding: 4px;
+  padding-inline: 12px;
+  font-size: 20px;
+  border-radius: 4px;
+  -webkit-user-select: none; /* Safari */        
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE10+/Edge */
+  user-select: none; /* Standard */
+}
+
+.btn.success {
+  background-color: rgb(125, 255, 98);
+  color:black;
+}
+
+.btn.error {
+  background-color: rgb(255, 98, 98);
+  color:rgb(255, 255, 255);
+}
+
+.btn:hover {
+  opacity: 0.9;
+  transform: scale(1.03);
+}
+
+.btn:active {
+  opacity: 1;
+  transform: scale(0.97);
+}

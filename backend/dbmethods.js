@@ -1,26 +1,27 @@
 const mongo = require("mongodb");
+const DbConnection = require("./DbConnection");
 
 module.exports = class Functions {
-  collection(name) {
-    var database = this.client.db("aptlogs");
+  static collection(name) {
+    var database = DbConnection.client.db("moto");
     return database.collection(name);
   }
 
-  async insertOne(doc, col) {
+  static async insertOne(doc, col) {
     const collection = this.collection(col);
 
     const result = await collection.insertOne(doc);
     return result.insertedCount === 1;
   }
 
-  async insertMany(doc, col) {
+  static async insertMany(doc, col) {
     const collection = this.collection(col);
 
     const result = await collection.insertMany(doc);
     return result.insertedCount > 0;
   }
 
-  async insertOneV2(doc, col, err, success) {
+  static async insertOneV2(doc, col, err, success) {
     const collection = this.collection(col);
 
     await collection.insertOne(doc, (err, result) => {
@@ -29,7 +30,7 @@ module.exports = class Functions {
     });
   }
 
-  async findById(id, col) {
+  static async findById(id, col) {
     var o_id = new mongo.ObjectID(id);
     const collection = this.collection(col);
 
@@ -41,7 +42,7 @@ module.exports = class Functions {
     return result;
   }
 
-  async findByCustom(custom, col) {
+  static async findByCustom(custom, col) {
     const collection = this.collection(col);
 
     const query = collection.find(custom);
@@ -52,7 +53,7 @@ module.exports = class Functions {
     return result;
   }
 
-  async getDocs(col) {
+  static async getDocs(col) {
     const collection = this.collection(col);
     const query = collection.find({});
     var result = [];
@@ -61,7 +62,7 @@ module.exports = class Functions {
     return result;
   }
 
-  async pushInArray(query, arrayName, newValue, collectionName) {
+  static async pushInArray(query, arrayName, newValue, collectionName) {
     let dataToPush = {};
     dataToPush[arrayName] = newValue;
 
@@ -75,7 +76,7 @@ module.exports = class Functions {
     return result.result.nModified == 1;
   }
 
-  async pullFromArray(query, arrayName, toRemove, collectionName) {
+  static async pullFromArray(query, arrayName, toRemove, collectionName) {
     let dataToPush = {};
     dataToPush[arrayName] = toRemove;
 
@@ -89,7 +90,7 @@ module.exports = class Functions {
     return result.result.nModified == 1;
   }
 
-  async updateById(col, id, newdata) {
+  static async updateById(col, id, newdata) {
     const collection = this.collection(col);
 
     let userId = new mongo.ObjectID(id);
@@ -101,7 +102,7 @@ module.exports = class Functions {
     return res.result.nModified == 1;
   }
 
-  async updateByCustom(col, custom, newdata, options = null) {
+  static async updateByCustom(col, custom, newdata, options = null) {
     const collection = this.collection(col);
 
     var obj = { $set: newdata };

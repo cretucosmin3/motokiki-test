@@ -1,9 +1,5 @@
 "use strict";
 
-const API = require("./Api");
-const Mongo = require("./mongo.js");
-
-//  ─│┌┐└┘
 /*
 ┌────────── Mongo ──────────────┐
 │    User   : motoadmin         │
@@ -12,32 +8,35 @@ const Mongo = require("./mongo.js");
 Compass : mongodb+srv://motoadmin:IAqKgPRm5cKHHAPJ@cluster0.ilvkw.mongodb.net/test
 */
 
-const uri =
-  "mongodb+srv://motoadmin:IAqKgPRm5cKHHAPJ@cluster0.ilvkw.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
+const API = require("./Api");
+const DbConnection = require("./DbConnection");
+const ApiMethods = require("./ApiMethods");
+
+const MongoConnectionString =
+  "mongodb+srv://motoadmin:IAqKgPRm5cKHHAPJ@cluster0.ilvkw.mongodb.net/moto?retryWrites=true&w=majority";
 
 process.on("unhandledRejection", (err) => {
   console.log(err);
   process.exit(1);
 });
 
-const sayHello = (r, h) => {
-  return "Hello";
-};
-
-const unknownRequest = (r, h) => {
-  throw "Unknown request!";
-};
+async function PrepareProgram() {
+  DbConnection.init(MongoConnectionString);
+  await API.init(3000, "localhost");
+  await DbConnection.connect();
+}
 
 async function StartProgram() {
-  // ! Connect and check connection to Database
-  if (!(await Database.connect())) {
-    console.log("Database: failed ❌");
+  try {
+    await PrepareProgram();
+  }
+  catch (err) {
+    console.log(`Error preparing API: ${err}`);
     return;
   }
 
-  await API.init(3000, "localhost");
-  API.setGet("/hello", sayHello);
-  API.setGet("/{any*}", unknownRequest);
+  API.setGet("/tyres", ApiMethods.GetTyres);
+  API.setGet("/brands", ApiMethods.GetBrands);
   API.start();
 }
 
