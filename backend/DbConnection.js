@@ -5,7 +5,8 @@ module.exports = class DbConnection {
   static #connected = false;
 
   static get client() {
-    if (this.#_client == undefined) throw "Mongo client hasn't been initialized!";
+    if (this.#_client == undefined)
+      throw "Mongo client hasn't been initialized!";
     if (!this.#connected) throw "Client needs to be connected!";
     return this.#_client;
   }

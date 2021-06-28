@@ -29,6 +29,9 @@ class WebApi {
     this.#server = Hapi.server({
       port: port,
       host: host,
+      routes: {
+        cors: true,
+      },
     });
   };
 
@@ -39,7 +42,8 @@ class WebApi {
       options: {
         handler: async (request, h) => {
           try {
-            let receivedData = route.type == "GET" ? request.query : request.payload;
+            let receivedData =
+              route.type == "GET" ? request.query : request.payload;
             let returnedData = await route.method(receivedData);
 
             return {
@@ -50,7 +54,7 @@ class WebApi {
             console.log(error);
             return {
               error: true,
-              message: error
+              message: error,
             };
           }
         },
